@@ -25,7 +25,7 @@ public class RoomSchedulingGatewayImpl implements RoomSchedulingGateway {
 
   @Override
   public void deleteScheduling(Long schedulingId) {
-    roomSchedulingRepository.deleteById(schedulingId.intValue());
+    roomSchedulingRepository.deleteById(schedulingId);
   }
 
   @Override

@@ -1,6 +1,5 @@
 package br.com.fellipeoliveira.meetingroom.domains;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;

@@ -37,15 +37,17 @@ public class MeetingRoomSchedulingController {
   @RequestMapping(value = "/{roomId}/scheduling", method = RequestMethod.GET)
   public ResponseEntity getScheduling(
       @PathVariable("roomId") @NotNull final Integer roomId,
-      @RequestParam("initialDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-      @NotNull final LocalDate initialDate,
-      @NotNull final LocalDate finalDate) {
+      @RequestParam("initialDate") @NotNull final String initialDate,
+      @RequestParam("finalDate") @NotNull final String finalDate) {
     log.info(
         "RECEIVED ON GET SCHEDULING METHOD WITH PARAMETERS: {}, {}, {}",
         roomId,
         initialDate,
         finalDate);
-    return ResponseEntity.ok().body(roomSchedulingUseCase.execute(roomId, initialDate, finalDate));
+    return ResponseEntity.ok()
+        .body(
+            roomSchedulingUseCase.execute(
+                roomId, LocalDate.parse(initialDate), LocalDate.parse(finalDate)));
   }
 
   @ResponseStatus(HttpStatus.CREATED)

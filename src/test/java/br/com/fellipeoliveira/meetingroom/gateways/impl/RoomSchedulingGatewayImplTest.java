@@ -39,7 +39,7 @@ public class RoomSchedulingGatewayImplTest {
   public void deleteScheduling() {
     roomSchedulingGateway.deleteScheduling(1L);
 
-    verify(roomSchedulingRepository, times(1)).deleteById(1);
+    verify(roomSchedulingRepository, times(1)).deleteById(1L);
   }
 
   @Test

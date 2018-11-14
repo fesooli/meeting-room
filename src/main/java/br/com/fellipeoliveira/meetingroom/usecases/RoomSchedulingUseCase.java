@@ -1,5 +1,6 @@
 package br.com.fellipeoliveira.meetingroom.usecases;
 
+import br.com.fellipeoliveira.meetingroom.exceptions.DateValidationException;
 import br.com.fellipeoliveira.meetingroom.gateways.RoomSchedulingGateway;
 import br.com.fellipeoliveira.meetingroom.gateways.http.request.SchedulingDTO;
 import br.com.fellipeoliveira.meetingroom.gateways.http.response.SchedulingResponseDTO;
@@ -25,6 +26,9 @@ public class RoomSchedulingUseCase {
   }
 
   public List<SchedulingResponseDTO> execute(Integer roomId, LocalDate initialDate, LocalDate finalDate) {
+    if(initialDate.isAfter(finalDate)) {
+      throw new DateValidationException("The initial date can not be after the final date!");
+    }
     return builderUtil.buildRoomSchedulesResponse(
         roomSchedulingGateway.getSchedulesByParameters(roomId, initialDate, finalDate));
   }

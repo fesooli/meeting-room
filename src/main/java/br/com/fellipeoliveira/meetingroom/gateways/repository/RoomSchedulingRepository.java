@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RoomSchedulingRepository extends JpaRepository<RoomScheduling, Integer> {
+public interface RoomSchedulingRepository extends JpaRepository<RoomScheduling, Long> {
 
   List<RoomScheduling> findAllByScheduledDateBetween(LocalDate initialDate, LocalDate finalDate);
 

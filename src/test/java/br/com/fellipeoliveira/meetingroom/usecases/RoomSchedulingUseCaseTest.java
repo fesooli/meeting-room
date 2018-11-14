@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import br.com.fellipeoliveira.meetingroom.domains.Room;
 import br.com.fellipeoliveira.meetingroom.domains.RoomScheduling;
+import br.com.fellipeoliveira.meetingroom.exceptions.DateValidationException;
 import br.com.fellipeoliveira.meetingroom.gateways.RoomSchedulingGateway;
 import br.com.fellipeoliveira.meetingroom.gateways.http.request.RoomDTO;
 import br.com.fellipeoliveira.meetingroom.gateways.http.request.SchedulingDTO;
@@ -44,10 +45,21 @@ public class RoomSchedulingUseCaseTest {
 
   @Test
   public void findSchedulesWithParameters() {
-    roomSchedulingUseCase.execute(any(), any(), any());
+    final LocalDate localDateInit = LocalDate.now();
+    final LocalDate localDateFinal = LocalDate.now().plusDays(1);
+    roomSchedulingUseCase.execute(1, localDateInit, localDateFinal);
 
-    verify(roomSchedulingGateway, times(1)).getSchedulesByParameters(any(), any(), any());
+    verify(roomSchedulingGateway, times(1))
+        .getSchedulesByParameters(1, localDateInit, localDateFinal);
     verify(builderUtil, times(1)).buildRoomSchedulesResponse(any());
+  }
+
+  @Test(expected = DateValidationException.class)
+  public void findSchedulesWithParametersError() {
+    final LocalDate localDateInit = LocalDate.now();
+    final LocalDate localDateFinal = LocalDate.now().plusDays(1);
+
+    roomSchedulingUseCase.execute(1, localDateFinal, localDateInit);
   }
 
   @Test
@@ -67,7 +79,7 @@ public class RoomSchedulingUseCaseTest {
   public void deleteSchedule() {
     roomSchedulingUseCase.execute(1L);
 
-    verify(roomSchedulingGateway, times(1)).deleteScheduling(any());
+    verify(roomSchedulingGateway, times(1)).deleteScheduling(1L);
   }
 
   private SchedulingDTO getSchedulingDTO() {

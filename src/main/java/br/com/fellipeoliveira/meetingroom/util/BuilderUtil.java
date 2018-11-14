@@ -32,7 +32,6 @@ public class BuilderUtil {
 
   public List<SchedulingResponseDTO> buildRoomSchedulesResponse(
       List<RoomScheduling> roomSchedules) {
-    log.info("Building RoomSchedule List with this params: {}", roomSchedules);
     return roomSchedules
         .stream()
         .map(
@@ -54,7 +53,6 @@ public class BuilderUtil {
   }
 
   public List<SchedulingDTO> buildRoomSchedules(List<RoomScheduling> roomSchedules) {
-    log.info("Building SchedulingDTO List with this params: {}", roomSchedules);
     return roomSchedules
         .stream()
         .map(
@@ -71,7 +69,6 @@ public class BuilderUtil {
   }
 
   public RoomResponseDTO builderRoomResponseDTO(Room room) {
-    log.info("Building RoomResponseDTO with this params: {}", room);
     return RoomResponseDTO.builder()
         .roomId(room.getRoomId())
         .roomNumber(room.getRoomNumber())
@@ -80,7 +77,6 @@ public class BuilderUtil {
   }
 
   public RoomDTO builderRoomDTO(Room room) {
-    log.info("Building RoomDTO with this params: {}", room);
     return RoomDTO.builder()
         .roomId(room.getRoomId())
         .roomNumber(room.getRoomNumber())
@@ -98,7 +94,6 @@ public class BuilderUtil {
   }
 
   public List<RoomResponseDTO> builderListResponse(List<Room> rooms) {
-    log.info("Building RoomResponseDTO List with this params: {}", rooms);
     return rooms
         .stream()
         .map(
