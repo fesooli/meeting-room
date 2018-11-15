@@ -194,8 +194,13 @@ O Meeting Room é um microserviço para agendamento de salas de reunião
  Request: HTTP METHOD GET http://localhost:8080/room/0/scheduling?initialDate=2018-11-12&finalDate=2018-11-16
  
  
- ##### OBS: O número 0 (zero) no room/0 indica que será buscado os agendamentos em TODAS as salas de reuniões dentro do perído de datas passado. Caso queira um agendamento de uma sala em específico, passar o número da sala no lugar do zero. 
+ ##### OBS: O número 0 (zero) no room/0 indica que será buscado os agendamentos em TODAS as salas de reuniões dentro do perído de datas passado.
  
+ ##### Caso queira um agendamento de uma sala em específico, passar o número da sala no lugar do zero, e será considerado apenas o campo initialDate para a consulta. Exemplo:
+ 
+ http://localhost:8080/room/7/scheduling?initialDate=2018-11-21&finalDate=2018-11-23
+ 
+ ##### No exemplo acima, será buscado os agendamentos da sala 7 e será considerado apenas a initialDate para a consulta, ou seja, será buscado os agendamentos da sala 7 e no dia 21-11-2018.
  
  Response:
      
