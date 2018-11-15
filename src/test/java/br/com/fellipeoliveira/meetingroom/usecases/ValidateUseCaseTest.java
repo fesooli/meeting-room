@@ -174,6 +174,23 @@ public class ValidateUseCaseTest {
   }
 
   @Test(expected = SchedulingValidationException.class)
+  public void executeWithSchedulingAlreadyExistsSameTimeValidationError() {
+    when(scheduleConfig.getScheduleEndTime()).thenReturn("19:00:00");
+    when(scheduleConfig.getScheduleStartTime()).thenReturn("07:00:00");
+    when(scheduleConfig.getMaximumReserveTimeInMinutes()).thenReturn(720);
+    when(scheduleConfig.getMinimumReserveTimeInMinutes()).thenReturn(15);
+    when(builderUtil.buildRoomSchedules(any())).thenReturn(Arrays.asList(getSchedulingDTO()));
+
+    SchedulingDTO schedulingDTO = getSchedulingDTO();
+
+    validateUseCase.execute(schedulingDTO);
+
+    verify(roomSchedulingGateway, times(1)).getSchedulesByParameters(any(), any(), any());
+    verify(builderUtil, times(1)).buildRoomSchedules(any());
+    verify(validationUtil, times(1)).validate(schedulingDTO);
+  }
+
+  @Test(expected = SchedulingValidationException.class)
   public void executeWithSchedulingOnSaturdayValidationError() {
     when(scheduleConfig.getScheduleEndTime()).thenReturn("19:00:00");
     when(scheduleConfig.getScheduleStartTime()).thenReturn("07:00:00");
@@ -222,8 +239,8 @@ public class ValidateUseCaseTest {
 
   private SchedulingDTO getSchedulingDTO() {
     return SchedulingDTO.builder()
-        .scheduledTime(LocalTime.now().plusMinutes(60))
-        .scheduledDate(LocalDate.now())
+        .scheduledTime(LocalTime.of(8, 00))
+        .scheduledDate(LocalDate.of(2018, 12, 10))
         .reservedTimeInMinutes(60)
         .room(new RoomDTO())
         .schedulingName("Teste")

@@ -35,11 +35,21 @@ O Meeting Room é um microserviço para agendamento de salas de reunião
  
  Request: HTTP METHOD POST http://localhost:8080/room
   
+ BODY:
+ 
+ ```
+ {
+ 	"roomNumber": 1,
+ 	"roomName": "Sala 01"
+ }
+ ```
+ 
  Response:
   
   ```
   [
       {
+          "roomId": 1,
           "roomNumber": 1,
           "roomName": "Sala 01"
       }
@@ -50,6 +60,16 @@ O Meeting Room é um microserviço para agendamento de salas de reunião
   
   Request: HTTP METHOD PUT http://localhost:8080/room
     
+  BODY:
+   
+   ```
+   {
+    "roomId": 1,
+   	"roomNumber": 50,
+   	"roomName": "Sala Labs 50"
+   }
+   ```  
+  
   Response:
     
   ```
@@ -138,10 +158,11 @@ O Meeting Room é um microserviço para agendamento de salas de reunião
       
   ```
     {
-    	"schedulingName": "Teste",
+      "id": 1,
+    	"schedulingName": "Projeto X Labs",
     	"scheduledDate":"2018-11-16",
     	"scheduledTime":"12:30:00",
-    	"reservedTimeInMinutes": 60,
+    	"reservedTimeInMinutes": 90,
     	"room": {
             "roomId": 1,
             "roomNumber": 1,
@@ -156,9 +177,9 @@ O Meeting Room é um microserviço para agendamento de salas de reunião
     [
         {
             "id": 1,
-            "schedulingName": "Teste",
+            "schedulingName": "Projeto X Labs",
             "initialDate": "2018-11-16T12:30:00",
-            "finalDate": "2018-11-16T13:30:00",
+            "finalDate": "2018-11-16T14:00:00",
             "room": {
                 "roomId": 1,
                 "roomNumber": 1,
@@ -207,7 +228,7 @@ O Meeting Room é um microserviço para agendamento de salas de reunião
  
  No arquivo application.properties contêm algumas configurações, incluindo o horário funcional das salas, exemplo: as salas só podem ser agendadas do horário das 10h às 20h. Isso é parametrizável bastando mudar nesse mesmo arquivo.
  
- - Não pode ser reservado uma sala se já houver agendamento para a mesma no mesmo horário;
+ - Não pode ser reservado uma sala se já houver agendamento para a mesma no mesmo dia e horário;
  - Não pode ser reservado salas aos finais de semana;
  - Não pode ser reservado salas fora do horário útil específicado no arquivo application.properties
  - Não pode ser reservado salas fora do horário minímo e máximo (exemplo: fazer uma reserva de 5 minutos ou fazer uma reserva de 5 dias seguidos)

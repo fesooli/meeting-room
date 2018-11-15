@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class SchedulingDTO {
 
+  @Min(value = 1, message = "id can not be less than one!")
   private Long id;
 
   @NotEmpty(message = "Scheduling Name can not be empty!")

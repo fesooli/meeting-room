@@ -30,7 +30,7 @@ public class RoomScheduling {
 
   private String schedulingName;
 
-  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "room_id")
   private Room room;
 

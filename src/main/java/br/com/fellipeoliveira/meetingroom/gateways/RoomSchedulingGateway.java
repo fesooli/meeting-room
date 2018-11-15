@@ -10,6 +10,8 @@ public interface RoomSchedulingGateway {
 
   void deleteScheduling(Long schedulingId);
 
+  RoomScheduling findRoomSchedulingById(Long id);
+
   List<RoomScheduling> getSchedules();
 
   List<RoomScheduling> getSchedulesByParameters(Integer roomId, LocalDate initialDate, LocalDate finalDate);

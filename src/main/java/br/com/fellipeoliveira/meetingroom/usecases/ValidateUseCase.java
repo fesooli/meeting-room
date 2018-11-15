@@ -66,14 +66,13 @@ public class ValidateUseCase {
             schedulingDTO.getScheduledDate(),
             schedulingDTO.getScheduledTime().plusMinutes(schedulingDTO.getReservedTimeInMinutes()));
 
-    if (!(isBetweenToDateTime(
-        scheduledDate.toLocalTime(),
-        LocalTime.parse(scheduleConfig.getScheduleStartTime(), DateTimeFormatter.ISO_LOCAL_TIME),
-        LocalTime.parse(scheduleConfig.getScheduleEndTime(), DateTimeFormatter.ISO_LOCAL_TIME))
-        && isBetweenToDateTime(
-        scheduledDateFinal.toLocalTime(),
-        LocalTime.parse(scheduleConfig.getScheduleStartTime(), DateTimeFormatter.ISO_LOCAL_TIME),
-        LocalTime.parse(scheduleConfig.getScheduleEndTime(), DateTimeFormatter.ISO_LOCAL_TIME)))) {
+    final LocalTime startTime = LocalTime.parse(scheduleConfig.getScheduleStartTime());
+    final LocalTime endTime = LocalTime.parse(scheduleConfig.getScheduleEndTime());
+
+    if ((!isBetweenToDateTime(
+            scheduledDate.toLocalTime(), startTime, endTime)
+        && !isBetweenToDateTime(
+            scheduledDateFinal.toLocalTime(), startTime, endTime))) {
       throw new SchedulingValidationException(
           "You can not schedule this room outside the allowed hour range. The time range is "
               .concat(scheduleConfig.getScheduleStartTime())
@@ -155,19 +154,33 @@ public class ValidateUseCase {
               throw new SchedulingValidationException(
                   "There is already a schedule for this period!");
             }
+
+            if (scheduledDateWithTime.isEqual(scheduledDate)
+                && scheduledDateWithFinalTime.isEqual(scheduledDateFinal)) {
+              throw new SchedulingValidationException(
+                  "There is already a schedule for this period!");
+            }
           });
     }
   }
 
   private boolean isBetweenToDates(
       LocalDateTime dateToCompare, LocalDateTime dateOne, LocalDateTime dateTwo) {
-    log.info("Comparing Dates -> Date to Compare: {}, Date One {}, Date Two {}", dateToCompare, dateOne, dateTwo);
+    log.info(
+        "Comparing Dates -> Date to Compare: {}, Date One {}, Date Two {}",
+        dateToCompare,
+        dateOne,
+        dateTwo);
     return dateToCompare.isAfter(dateOne) && dateToCompare.isBefore(dateTwo);
   }
 
   private boolean isBetweenToDateTime(
       LocalTime timeToCompare, LocalTime timeOne, LocalTime timeTwo) {
-    log.info("Comparing times -> Time to Compare: {}, Time One {}, Time Two {}", timeToCompare, timeOne, timeTwo);
+    log.info(
+        "Comparing times -> Time to Compare: {}, Time One {}, Time Two {}",
+        timeToCompare,
+        timeOne,
+        timeTwo);
     return (timeToCompare.isAfter(timeOne) && timeToCompare.isBefore(timeTwo));
   }
 }

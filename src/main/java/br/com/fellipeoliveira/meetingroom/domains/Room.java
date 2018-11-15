@@ -3,6 +3,7 @@ package br.com.fellipeoliveira.meetingroom.domains;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,6 +28,15 @@ public class Room {
   private Integer roomNumber;
   private String roomName;
 
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "room")
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "room")
   private List<RoomScheduling> roomScheduling;
+
+  @Override
+  public String toString() {
+    return "Room{" +
+        "roomId=" + roomId +
+        ", roomNumber=" + roomNumber +
+        ", roomName='" + roomName + '\'' +
+        '}';
+  }
 }

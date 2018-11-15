@@ -11,7 +11,7 @@ public interface RoomSchedulingRepository extends JpaRepository<RoomScheduling, 
 
   List<RoomScheduling> findAllByScheduledDateBetween(LocalDate initialDate, LocalDate finalDate);
 
-  List<RoomScheduling> findAllByScheduledDateAndRoom(LocalDate scheduledDate, Room room);
+  List<RoomScheduling> findAllByScheduledDate(LocalDate scheduledDate);
 
   List<RoomScheduling> findByRoom(Room room);
 

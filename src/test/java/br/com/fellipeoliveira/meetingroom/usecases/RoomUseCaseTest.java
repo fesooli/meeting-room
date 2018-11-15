@@ -12,6 +12,7 @@ import br.com.fellipeoliveira.meetingroom.gateways.RoomGateway;
 import br.com.fellipeoliveira.meetingroom.gateways.http.request.RoomDTO;
 import br.com.fellipeoliveira.meetingroom.gateways.http.response.RoomResponseDTO;
 import br.com.fellipeoliveira.meetingroom.util.BuilderUtil;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -38,8 +39,7 @@ public class RoomUseCaseTest {
 
   @Test
   public void findRooms() {
-    when(builderUtil.builderListResponse(any()))
-        .thenReturn(Arrays.asList(new RoomResponseDTO()));
+    when(builderUtil.builderListResponse(any())).thenReturn(Arrays.asList(new RoomResponseDTO()));
 
     final List<RoomResponseDTO> roomResponses = roomUseCase.execute();
 
@@ -57,6 +57,21 @@ public class RoomUseCaseTest {
   @Test
   public void saveRoom() {
     final RoomDTO roomDTO = getRoomDTO();
+    when(builderUtil.builderRoom(any())).thenReturn(getRoom(roomDTO));
+
+    roomUseCase.execute(roomDTO);
+
+    verify(validateUseCase, times(1)).execute(roomDTO);
+    verify(builderUtil, times(1)).builderRoom(roomDTO);
+    verify(roomGateway, times(1)).saveRoom(builderUtil.builderRoom(roomDTO));
+  }
+
+  @Test
+  public void saveRoomWithNonNullSchedule() {
+    final RoomDTO roomDTO = getRoomDTO();
+    Room room = getRoom(roomDTO);
+    room.setRoomScheduling(new ArrayList<>());
+    when(builderUtil.builderRoom(any())).thenReturn(room);
 
     roomUseCase.execute(roomDTO);
 
@@ -79,5 +94,13 @@ public class RoomUseCaseTest {
 
   private RoomDTO getRoomDTO() {
     return RoomDTO.builder().roomName("Sala 01").roomNumber(1).roomId(1).build();
+  }
+
+  private Room getRoom(RoomDTO roomDTO) {
+    return Room.builder()
+        .roomName(roomDTO.getRoomName())
+        .roomNumber(roomDTO.getRoomNumber())
+        .roomId(roomDTO.getRoomId())
+        .build();
   }
 }

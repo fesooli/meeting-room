@@ -8,6 +8,8 @@ import static org.mockito.Mockito.when;
 import br.com.fellipeoliveira.meetingroom.domains.Room;
 import br.com.fellipeoliveira.meetingroom.domains.RoomScheduling;
 import br.com.fellipeoliveira.meetingroom.exceptions.DateValidationException;
+import br.com.fellipeoliveira.meetingroom.exceptions.NotFoundException;
+import br.com.fellipeoliveira.meetingroom.gateways.RoomGateway;
 import br.com.fellipeoliveira.meetingroom.gateways.RoomSchedulingGateway;
 import br.com.fellipeoliveira.meetingroom.gateways.http.request.RoomDTO;
 import br.com.fellipeoliveira.meetingroom.gateways.http.request.SchedulingDTO;
@@ -25,6 +27,8 @@ public class RoomSchedulingUseCaseTest {
   @InjectMocks private RoomSchedulingUseCase roomSchedulingUseCase;
 
   @Mock private RoomSchedulingGateway roomSchedulingGateway;
+
+  @Mock private RoomGateway roomGateway;
 
   @Mock private ValidateUseCase validateUseCase;
 
@@ -70,9 +74,46 @@ public class RoomSchedulingUseCaseTest {
 
     roomSchedulingUseCase.execute(schedulingDTO);
 
-    verify(roomSchedulingGateway, times(1)).saveScheduling(getRoomScheduling(schedulingDTO));
+    verify(roomSchedulingGateway, times(1)).saveScheduling(any());
+    verify(roomGateway, times(1)).findRoomById(schedulingDTO.getRoom().getRoomId());
     verify(builderUtil, times(1)).buildRoomScheduling(schedulingDTO);
     verify(validateUseCase, times(1)).execute(schedulingDTO);
+  }
+
+  @Test
+  public void updateSchedule() {
+    final SchedulingDTO schedulingDTO = getSchedulingDTO();
+    schedulingDTO.setId(1L);
+    when(builderUtil.buildRoomScheduling(schedulingDTO))
+        .thenReturn(getRoomScheduling(schedulingDTO));
+
+    roomSchedulingUseCase.execute(schedulingDTO);
+
+    verify(roomSchedulingGateway, times(1)).findRoomSchedulingById(schedulingDTO.getId());
+    verify(roomSchedulingGateway, times(1)).saveScheduling(any());
+    verify(roomGateway, times(1)).findRoomById(schedulingDTO.getRoom().getRoomId());
+    verify(builderUtil, times(1)).buildRoomScheduling(schedulingDTO);
+    verify(validateUseCase, times(1)).execute(schedulingDTO);
+  }
+
+  @Test(expected = NotFoundException.class)
+  public void saveScheduleRoomError() {
+    final SchedulingDTO schedulingDTO = getSchedulingDTO();
+    when(builderUtil.buildRoomScheduling(schedulingDTO))
+        .thenReturn(getRoomScheduling(schedulingDTO));
+    schedulingDTO.setRoom(null);
+
+    roomSchedulingUseCase.execute(schedulingDTO);
+  }
+
+  @Test(expected = NotFoundException.class)
+  public void saveScheduleRoomIdError() {
+    final SchedulingDTO schedulingDTO = getSchedulingDTO();
+    when(builderUtil.buildRoomScheduling(schedulingDTO))
+        .thenReturn(getRoomScheduling(schedulingDTO));
+    schedulingDTO.getRoom().setRoomId(null);
+
+    roomSchedulingUseCase.execute(schedulingDTO);
   }
 
   @Test

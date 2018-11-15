@@ -4,6 +4,7 @@ import br.com.fellipeoliveira.meetingroom.domains.Room;
 import br.com.fellipeoliveira.meetingroom.exceptions.NotFoundException;
 import br.com.fellipeoliveira.meetingroom.gateways.RoomGateway;
 import br.com.fellipeoliveira.meetingroom.gateways.repository.RoomRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
